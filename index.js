@@ -1,3 +1,1 @@
-const EasyEmbedPages = require('./src/EasyEmbedPages');
-
-module.exports = EasyEmbedPages;
+module.exports = require('./src/EasyEmbedPages');

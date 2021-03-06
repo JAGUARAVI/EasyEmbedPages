@@ -77,47 +77,46 @@ embed.start();
 Full cranked up usage!
 ```js
 const embed = new EasyEmbedPages(message.channel, {
-        //embed fields
-        pages: [
-            {
-                title: "Hello World!",
-                color: "#00ffff",
-                author: {
-                    name: "Jaguar"
-                }
-            }, 
-            {
-                fields: [
-                    {
-                        name: "My field",
-                        value: "My value",
-                        inline: true
-                    }
-                ],
-                thumbnail: "https://example.com/my_other_image.png"
+    //embed fields
+    pages: [
+        {
+            title: "Hello World!",
+            color: "#00ffff",
+            author: {
+                name: "Jaguar"
             }
-        ],
-        color: 'RANDOM', // here you can fill any Discord Color, filling with RANDOM will give each page a random color
-        url: "https://example.com",
-        title: "This is a test embed",
-        author: {
-            name: "Jaguar"
-        },
-        footer: {
-            text: "Insert Footer Text Here"
-        },
-        description: "Insert long text here",
-        image: "https://example.com/your_large_image.png",
-        thumbnail: "https://example.com/your_small_thumbnail.png",
-        
-        allowStop: true, // enable if you want the stop button to appear used to stop the interactive process
-        time: 300000, // the idle time after which you want to stop the interactive process
+        }, 
+        {
+            fields: [
+                {
+                    name: "My field",
+                    value: "My value",
+                    inline: true
+                }
+            ],
+            thumbnail: "https://example.com/my_other_image.png"
+        }
+    ],
+    color: 'RANDOM', // here you can fill any Discord Color, filling with RANDOM will give each page a random color
+    url: "https://example.com",
+    title: "This is a test embed",
+    author: {
+        name: "Jaguar"
     },
-    (embed) => {
-        // this function will codeblock the whole description!
-        embed.setDescription(`\`\`\`\n${embed.description}\n\`\`\``)
-    }
-);
+    footer: {
+        text: "Insert Footer Text Here"
+    },
+    description: "Insert long text here",
+    image: "https://example.com/your_large_image.png",
+    thumbnail: "https://example.com/your_small_thumbnail.png",
+    
+    allowStop: true, // enable if you want the stop button to appear used to stop the interactive process
+    time: 300000, // the idle time after which you want to stop the interactive process
+},
+(embed) => {
+    // this function will codeblock the whole description!
+    embed.setDescription(`\`\`\`\n${embed.description}\n\`\`\``)
+});
 
 embed.start({
     channel: message.channel, // the channel in which you want to send the embed
