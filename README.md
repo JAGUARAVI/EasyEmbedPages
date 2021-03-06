@@ -4,6 +4,7 @@
 This module is used to make *hassle-free* embeds with different pages... This module is **fully customizable** and each property of each page can be changed!
 The description of the embed gets dynamically carried over to a different page if it exceed **2000 chars**
 
+#### Note: works only with discord.js 12
 
 # Installation
 ```bash
