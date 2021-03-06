@@ -66,32 +66,35 @@ embed.start();
 Full cranked up usage!
 ```js
 const embed = new EasyEmbedPages(message.channel,{
-    //embed fields
-    
-    pages: [
-        {title: "Hello World!", color: "#00ffff", author: {name: "Jaguar"}}, 
-        //this will override the default values
-        //here in pages you can fill any field which you fill in a regular MessageEmbed
-        {fields: [{name: "My field", value: "My value", inline: true}], thumbnail: "https://example.com/my_other_image.png"} 
-        //although fields can only be filled here only... i.e. only in pages
-        //DO NOT USE - field ... always use fields
-    ],
-    color: 'RANDOM', //here you can fill any Discord ColorResolvable... RANDOM will give each page a random color
-    url: "https://example.com",
-    title: "This is a test embed",
-    author: {name: "Jaguar"},
-    footer: {text: "Insert Footer Text Here"},
-    description: "Your....Very....Long....Content",
-    image: "https://example.com/your_large_image.png",
-    thumbnail: "https://example.com/your_small_thumbnail.png",
-    
-    //custom options
-    allowStop: true, //enable if you want the stop button to appear used to stop the interactive process
-    time: 300000, //the idle time after which you want to stop the interactive process
-});
+        //embed fields
+        pages: [
+            {title: "Hello World!", color: "#00ffff", author: {name: "Jaguar"}}, 
+            //this will override the default values
+            //here in pages you can fill any field which you fill in a regular MessageEmbed
+            {fields: [{name: "My field", value: "My value", inline: true}], thumbnail: "https://example.com/my_other_image.png"} 
+            //although fields can only be filled here only... i.e. only in pages
+            //DO NOT USE - field ... always use fields
+        ],
+        color: 'RANDOM', //here you can fill any Discord ColorResolvable... RANDOM will give each page a random color
+        url: "https://example.com",
+        title: "This is a test embed",
+        author: {name: "Jaguar"},
+        footer: {text: "Insert Footer Text Here"},
+        description: "Your....Very....Long....Content",
+        image: "https://example.com/your_large_image.png",
+        thumbnail: "https://example.com/your_small_thumbnail.png",
+        
+        //custom options
+        allowStop: true, //enable if you want the stop button to appear used to stop the interactive process
+        time: 300000, //the idle time after which you want to stop the interactive process
+    },
+    (embed) => {embed.setDescription(`\`\`\`\n${embed.description}\n\`\`\``)} //this function will codeblock to the whole description!... Will hely you unleash your creativity!
+);
 
 embed.start({
     channel: message.channel, //the channel in which you want to send the embed
     person: message.author    //use this if you only want to allow a single person to be able to access the embed reactions control
 });
 ```
+
+# Example Eval Command!

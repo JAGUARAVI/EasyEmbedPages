@@ -66,7 +66,7 @@ module.exports = class EasyEmbedPages {
 
             data.fields = [];
 
-            if((this.dataPages[index] && this.dataPages[index].color) || this.url) data.color = this.dataPages[index] && this.dataPages[index].color ? this.dataPages[index].color : this.color;
+            if((this.dataPages[index] && this.dataPages[index].color) || this.color) data.color = this.dataPages[index] && this.dataPages[index].color ? this.dataPages[index].color : this.color;
 
             if((this.dataPages[index] && this.dataPages[index].url) || this.url) data.url = this.dataPages[index] && this.dataPages[index].url ? this.dataPages[index].url : this.url;
 
@@ -95,7 +95,7 @@ module.exports = class EasyEmbedPages {
             if(array[index]){
                 let i = array[index].join("");
                 if(index < great) i = `${i}...`;
-                else i = `...${i}`;
+                else if (index !== 0) i = `...${i}`;
                 data.description = i;
             } 
 
@@ -144,13 +144,15 @@ module.exports = class EasyEmbedPages {
         
         this.message = await this.channel.send(this.pages[this.page]);
 
-        await Promise.all(this.allowedReactions.map(async (reaction) => await this.message.react(reaction)));
-        this.collector = this.message.createReactionCollector(condition,{dispose: true, idle: this.time});
-        this.collector.on('collect',this._handleReaction.bind(this));
-        this.collector.on('remove',this._handleReaction.bind(this));
-        this.collector.once('end',() => {
+        if(this.pages.length > 1){
+            await Promise.all(this.allowedReactions.map(async (reaction) => await this.message.react(reaction)));
+            this.collector = this.message.createReactionCollector(condition,{dispose: true, idle: this.time});
+            this.collector.on('collect',this._handleReaction.bind(this));
+            this.collector.on('remove',this._handleReaction.bind(this));
+            this.collector.once('end',() => {
             this.message.reactions.removeAll();
         })
+        }
     }
 
     /**
