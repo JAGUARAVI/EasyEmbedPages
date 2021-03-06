@@ -98,3 +98,40 @@ embed.start({
 ```
 
 # Example Eval Command!
+
+```js
+const EasyEmbedPages = require('easy-embed-pages');
+
+async run(client,message,args){
+    const clean = text => {
+        if (typeof(text) === "string")
+            return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+        else
+            return text;
+    }
+
+    let output;
+    let status = true;
+    try {
+        let evaled = eval(args.join(' '));
+        if (evaled instanceof Promise) evaled = await evaled;
+
+        if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
+        
+        output = clean(evaled).replace(client.token,'[TOKEN REMOVED]');
+    } catch (err) {
+        status = false;
+        output = err.toString();
+    }
+    const embed = new EasyEmbedPages(
+        message.channel,
+        {   
+            color: status ? 'GREEN' : 'RED',
+            title: "Evaled Code",
+            description: output
+        },
+        (embed) => {embed.setDescription(`\`\`\`xl\n${embed.description}\n\`\`\``)}
+    );
+    embed.start({user: message.author});
+}
+```
