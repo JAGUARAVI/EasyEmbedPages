@@ -26,28 +26,28 @@ module.exports = class EasyEmbedPages {
      * @param {Function} pageGen - to change embed using a function
      */
     constructor(channel,data = {},pageGen = function(){}){
-        this.allowedReactions = ['⏪','⬅️','➡️','⏩','⏹️']; //all reactions... changing anything would break the module
+        this.allowedReactions = ['⏪','⬅️','➡️','⏩','⏹️'];                  //all reactions... changing anything would break the module
 
         this.channel = channel instanceof Discord.TextChannel ? channel : null; //the channel in which we will send the embeds
 
-        this.allowStop = data.allowStop || true; //if we want the stop emoji '⏹️' to stop the interactive process
-        this.time = data.time || null; //idle time to stop the interactive process
+        this.allowStop = data.allowStop || true;                                //if we want the stop emoji '⏹️' to stop the interactive process
+        this.time = data.time || null;                                          //idle time to stop the interactive process
 
-        this.pages = []; //embed pages... automagically generated xD
-        this.page = 0; //currect page number
+        this.pages = [];                                                        //embed pages... automagically generated xD
+        this.page = 0;                                                          //current page number
 
-        this.dataPages = data.pages || []; //page data for extra configuration
+        this.dataPages = data.pages || [];                                      //page data for extra configuration
 
-        this.color = data.color || null; //embed color
-        this.url = data.url || null; //embed url
-        this.title = data.title || null; //embed title
-        this.author = data.author || null; //embed author object
-        this.footer = data.footer || null; //embed footer object
-        this.thumbnail = data.thumbnail || null; //embed thumbnail
-        this.image = data.image || null; //embed large image
-        this.description = data.content || data.description || ""; //the content to be presented dynamically
+        this.color = data.color || null;                                        //embed color
+        this.url = data.url || null;                                            //embed url
+        this.title = data.title || null;                                        //embed title
+        this.author = data.author || null;                                      //embed author object
+        this.footer = data.footer || null;                                      //embed footer object
+        this.thumbnail = data.thumbnail || null;                                //embed thumbnail
+        this.image = data.image || null;                                        //embed large image
+        this.description = data.content || data.description || "";              //the content to be presented dynamically
 
-        this.pageGen = pageGen; //the function to customize embeds
+        this.pageGen = pageGen;                                                 //the function to customize embeds
     }
 
     /**
