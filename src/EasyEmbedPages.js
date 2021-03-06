@@ -24,26 +24,27 @@ module.exports = class EasyEmbedPages {
      * @param {Object} data 
      * @param {Function} pageGen - to change embed using a function
      */
+
     constructor(channel, data = {}, pageGen = () => {}) {
         
         this.channel = channel;
-        this.allowStop = data.allowStop || true; // if we want the stop emoji '⏹️' to stop the interactive process
-        this.time = data.time; // idle time to stop the interactive process
-        this.pages = []; // embed pages... automagically generated xD
-        this.page = 0; // currect page number
-        this.dataPages = data.pages || []; // page data for extra configuration
-        this.color = data.color; // embed color
-        this.url = data.url; // embed url
-        this.title = data.title; // embed title
-        this.author = data.author; // embed author object
-        this.footer = data.footer; // embed footer object
-        this.thumbnail = data.thumbnail; // embed thumbnail
-        this.image = data.image; // embed large image
-        this.description = data.content || data.description || ""; // the content to be presented dynamically
-        this.pageGen = pageGen; // the function to customize embeds
+        this.allowStop = data.allowStop || true;                      // if we want the stop emoji '⏹️' to stop the interactive process
+        this.time = data.time;                                        // idle time to stop the interactive process
+        this.pages = [];                                              // embed pages... automagically generated xD
+        this.page = 0;                                                // currect page number
+        this.dataPages = data.pages || [];                            // page data for extra configuration
+        this.color = data.color;                                      // embed color
+        this.url = data.url;                                          // embed url
+        this.title = data.title;                                      // embed title
+        this.author = data.author;                                    // embed author object
+        this.footer = data.footer;                                    // embed footer object
+        this.thumbnail = data.thumbnail;                              // embed thumbnail
+        this.image = data.image;                                      // embed large image
+        this.description = data.content || data.description || "";    // the content to be presented dynamically
+        this.pageGen = pageGen;                                       // the function to customize embeds
         
-        this.ratelimit = Number(data.ratelimit) || null; // the reaction ratelimit, to prevent reaction spamming
-        this.lastReaction = 0;
+        this.ratelimit = Number(data.ratelimit) || null;              // the reaction ratelimit, to prevent reaction spamming
+        this.lastReaction = 0;                                        // used to store last reaction timestamp
     }
 
     /**
