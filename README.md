@@ -130,7 +130,7 @@ embed.start({
 ```js
 const EasyEmbedPages = require('easy-embed-pages');
 
-async run(client, message, args) {
+async function run(client, message, args) {
     const clean = text => ((typeof text === "string") ? text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203)) : text);
 
     let output;
