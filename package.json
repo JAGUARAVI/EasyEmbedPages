@@ -1,0 +1,34 @@
+{
+  "name": "easy-embed-pages",
+  "version": "0.0.1",
+  "description": "An awesome module for easy and 100% customizable dynamic embeds with interactive pages!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JAGUARAVI/EasyEmbedPages.git"
+  },
+  "keywords": [
+    "discord",
+    "embeds",
+    "dynamic-embed",
+    "embed-pages",
+    "dynamic-pages",
+    "dynamic",
+    "embeds-dynamic",
+    "embeds-buttons",
+    "pages"
+  ],
+  "author": "JAGUAR#0240",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JAGUARAVI/EasyEmbedPages/issues"
+  },
+  "homepage": "https://github.com/JAGUARAVI/EasyEmbedPages#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1"
+  },
+  "types": "./typings/index.d.ts"
+}
