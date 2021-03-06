@@ -116,7 +116,7 @@ const embed = new EasyEmbedPages(message.channel, {
 },
 (embed) => {
     // this function will codeblock the whole description!
-    embed.setDescription(`\`\`\`\n${embed.description}\n\`\`\``)
+    if(embed.description) embed.setDescription(`\`\`\`\n${embed.description}\n\`\`\``)
 });
 
 embed.start({
@@ -154,7 +154,7 @@ async function run(client, message, args) {
             description: output
         },
         (embed) => {
-            embed.setDescription(`\`\`\`xl\n${embed.description}\n\`\`\``)
+            if(embed.description) embed.setDescription(`\`\`\`xl\n${embed.description}\n\`\`\``)
         }
     );
     embed.start({ user: message.author });
