@@ -25,7 +25,7 @@ const embed = new EasyEmbedPages(message.channel,{
     description: "Indert...Very...Very...Long...Text...Here"
 });
 
-embed.start(); //sends the embed in the secified channel and starts the interactive process
+embed.start(); //sends the embed in the specified channel and starts the interactive process
 ```
 
 ### Usage with custom fields and other things for each page
