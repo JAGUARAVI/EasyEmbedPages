@@ -22,7 +22,7 @@ const embed = new EasyEmbedPages(message.channel,{
     color: '#ff00ff',
     url:'https://example.com',
     title: "Simple Embed",
-    description: "Indert...Very...Very...Long...Text...Here"
+    description: "Insert...Very...Very...Long...Text...Here"
 });
 
 embed.start(); //sends the embed in the specified channel and starts the interactive process
@@ -39,7 +39,7 @@ const embed = new EasyEmbedPages(message.channel,{
     color: '#ff00ff',
     url:'https://example.com',
     title: "Simple Embed",
-    description: "Indert...Very...Very...Long...Text...Here"
+    description: "Insert...Very...Very...Long...Text...Here"
 });
 
 embed.start();
@@ -88,7 +88,7 @@ const embed = new EasyEmbedPages(message.channel,{
         allowStop: true, //enable if you want the stop button to appear used to stop the interactive process
         time: 300000, //the idle time after which you want to stop the interactive process
     },
-    (embed) => {embed.setDescription(`\`\`\`\n${embed.description}\n\`\`\``)} //this function will codeblock to the whole description!... Will hely you unleash your creativity!
+    (embed) => {embed.setDescription(`\`\`\`\n${embed.description}\n\`\`\``)} //this function will codeblock the whole description!... Will help you unleash your creativity!
 );
 
 embed.start({
