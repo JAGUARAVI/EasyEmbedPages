@@ -1,16 +1,14 @@
 const Discord = require('discord.js');
 
-// the string chunking function
+// the array chunking function
 const chunk = (array, chunkSize = 0) => {
     if (!Array.isArray(array)) throw new Error('First parameter must be an array');
     return array.reduce((previous, current) => {
         let chunk;
-        if (previous.length === 0 || previous[previous.length - 1].length === chunkSize) {
+        if (!previous.length || previous[previous.length - 1].length === chunkSize) {
             chunk = [];
             previous.push(chunk);
-        } else {
-            chunk = previous[previous.length - 1];
-        }
+        } else chunk = previous[previous.length - 1];
         chunk.push(current);
         return previous;
     }, []);
@@ -26,30 +24,32 @@ module.exports = class EasyEmbedPages {
      * @param {Object} data 
      * @param {Function} pageGen - to change embed using a function
      */
-    constructor(channel, data = {}, pageGen = () => {}){
-        if (!(channel instanceof Discord.TextChannel)) throw new Error('The channel must be a discord text channel object.');
+    constructor(channel, data = {}, pageGen = () => {}) {
         
         this.channel = channel;
         this.allowStop = data.allowStop || true; // if we want the stop emoji '⏹️' to stop the interactive process
-        this.time = data.time || null; // idle time to stop the interactive process
+        this.time = data.time; // idle time to stop the interactive process
         this.pages = []; // embed pages... automagically generated xD
         this.page = 0; // currect page number
         this.dataPages = data.pages || []; // page data for extra configuration
-        this.color = data.color || null; // embed color
-        this.url = data.url || null; // embed url
-        this.title = data.title || null; // embed title
-        this.author = data.author || null; // embed author object
-        this.footer = data.footer || null; // embed footer object
-        this.thumbnail = data.thumbnail || null; // embed thumbnail
-        this.image = data.image || null; // embed large image
+        this.color = data.color; // embed color
+        this.url = data.url; // embed url
+        this.title = data.title; // embed title
+        this.author = data.author; // embed author object
+        this.footer = data.footer; // embed footer object
+        this.thumbnail = data.thumbnail; // embed thumbnail
+        this.image = data.image; // embed large image
         this.description = data.content || data.description || ""; // the content to be presented dynamically
         this.pageGen = pageGen; // the function to customize embeds
+        
+        this.ratelimit = Number(data.ratelimit) || null; // the reaction ratelimit, to prevent reaction spamming
+        this.lastReaction = 0;
     }
 
     /**
      * The magic function which generates the embeds
      */
-    generatePages(){
+    generatePages() {
         let text = this.description.split("");
         let great = text.length > 2000 ? Math.floor(text.length/2000) : false;
         let array = great ? chunk(text, 2000) : [text];
@@ -67,39 +67,37 @@ module.exports = class EasyEmbedPages {
             if ((this.dataPages[index] && this.dataPages[index].footer) || this.footer) data.footer = this.dataPages[index] && this.dataPages[index].footer || this.footer;
             else data.footer = { text: `Page ${index + 1} of ${x} page${x > 1 ? 's' : ''}` };
 
-            if ((this.dataPages[index] && this.dataPages[index].thumbnail) || this.thumbnail) data.thumbnail = this.dataPages[index] && this.dataPages[index].thumbnail ? this.dataPages[index].thumbnail : this.thumbnail;
-            if ((this.dataPages[index] && this.dataPages[index].image) || this.image) data.image = this.dataPages[index] && this.dataPages[index].image ? this.dataPages[index].image : this.image;
+            if ((this.dataPages[index] && this.dataPages[index].thumbnail) || this.thumbnail) data.thumbnail = this.dataPages[index] && this.dataPages[index].thumbnail || this.thumbnail;
+            if ((this.dataPages[index] && this.dataPages[index].image) || this.image) data.image = this.dataPages[index] && this.dataPages[index].image || this.image;
             if (this.dataPages[index] && (this.dataPages[index].description || this.dataPages[index].content)) data.fields.push({ name: "‎\u200b", value: this.dataPages[index].description || this.dataPages[index].content, inline: false});
-            if (this.dataPages[index] && this.dataPages[index].fields) this.dataPages[index].fields.map(x => data.fields.push({name: x.name || "\u200b" , value: x.value || "\u200b" ,inline: x.inline || false }));
+            if (this.dataPages[index] && this.dataPages[index].fields) this.dataPages[index].fields.map(x => data.fields.push({ name: x.name || "\u200b" , value: x.value || "\u200b" , inline: x.inline || false }));
 
             if (array[index]) {
                 let i = array[index].join("");
                 if (index < great) i = `${i}...`;
-                else if (index !== 0) i = `...${i}`;
+                else if (index) i = `...${i}`;
                 data.description = i;
             }
 
             const embed = new Discord.MessageEmbed(data);
-
             this.pageGen(embed);
             this.pages.push(embed);
         };
     }
 
     /**
-     * Function used to start the dynamic embed pagination
-     * Note: Do not await this function... it would never resolve... (can resolve after idle time expires)
+     * Function used to start the dynamic embed pagination.
      * 
      * @param {Object} options 
      * @param {Discord.Channel} options.channel
      * @param {Discord.User} options.user
      * @param {Number} page
      */
-    async start(options = {}, page = 0){
+    async start(options = {}, page = 0) {
         this.page = page;
 
         if (options instanceof Discord.Channel) options = { channel: options };
-        else if (typeof options !=='object' || options === null) options = {};
+        else if (!options || typeof options !== 'object') options = {};
         let condition;
 
         if (options.allowStop) this.stop = options.allowStop;
@@ -117,15 +115,13 @@ module.exports = class EasyEmbedPages {
         if (this.page > this.pages.length) throw new Error("Page number greater than total pages!");
         this.message = await this.channel.send(this.pages[this.page]);
 
-        if (this.pages.length > 1){
+        if (this.pages.length > 1) {
             await Promise.all(allowedReactions.map(async (reaction) => await this.message.react(reaction)));
             
-            this.collector = this.message.createReactionCollector(condition, {dispose: true, idle: this.time });
+            this.collector = this.message.createReactionCollector(condition, { dispose: true, idle: this.time });
             this.collector.on('collect', this._handleReaction.bind(this));
             this.collector.on('remove',  this._handleReaction.bind(this));
-            this.collector.once('end', () => {
-                this.message.reactions.removeAll();
-            });
+            this.collector.once('end', () => this.message.reactions.removeAll());
         }
     }
 
@@ -135,6 +131,10 @@ module.exports = class EasyEmbedPages {
      * @param {Discord.User} user 
      */
     async _handleReaction(reaction, user) {
+        
+        if ((!allowedReactions.includes(reaction.emoji.name)) || (this.ratelimit && ((Date.now() - this.lastReaction) < this.ratelimit))) return;
+        this.lastReaction = Date.now();
+        
         switch (reaction.emoji.name) {
             case '⏪':
                 if (this.page === 0) break;
