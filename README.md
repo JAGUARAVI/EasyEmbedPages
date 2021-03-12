@@ -113,7 +113,7 @@ const embed = new EasyEmbedPages(message.channel, {
     
     allowStop: true, // enable if you want the stop button to appear used to stop the interactive process
     time: 300000, // the idle time after which you want to stop the interactive process
-    ratelimit: 2000 // ratelimit (in milliseconds) to prevent reaction spam, optional.
+    ratelimit: 1500 // ratelimit (in milliseconds) to prevent reaction spam, optional. (anything greater than 2 is not recommended)
 },
 (embed) => {
     // this function will codeblock the whole description!
