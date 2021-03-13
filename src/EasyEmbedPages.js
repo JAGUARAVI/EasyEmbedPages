@@ -40,7 +40,7 @@ module.exports = class EasyEmbedPages {
         this.footer = data.footer;                                    // embed footer object
         this.thumbnail = data.thumbnail;                              // embed thumbnail
         this.image = data.image;                                      // embed large image
-        this.description = data.content || data.description || "";    // the content to be presented dynamically
+        this.description = data.content || data.description || null;    // the content to be presented dynamically
         this.pageGen = pageGen;                                       // the function to customize embeds
         
         this.ratelimit = Number(data.ratelimit) || null;              // the reaction ratelimit, to prevent reaction spamming
@@ -51,15 +51,32 @@ module.exports = class EasyEmbedPages {
      * The magic function which generates the embeds
      */
     generatePages() {
-        let text = this.description.split("");
-        let great = text.length > 2000 ? Math.floor(text.length/2000) : false;
-        let array = great ? chunk(text, 2000) : [text];
-        let x = Math.max(array.length, this.dataPages.length);
+        let text,great,array;
+
+        if(this.description){
+            text = this.description.split("");
+            great = text.length > 2000 ? Math.floor(text.length/2000) : false;
+            array = great ? chunk(text, 2000) : [text];
+        }
+
+        let x = Math.max(array ? array.length : 0, this.dataPages.length);
         
         this.pages = [];
 
         for (let index = 0; index < x; index++) {
             const data = { fields: [] };
+
+            if (this.description && array[index]) {
+                let i = array[index].join("");
+                if (index < great) i = `${i}...`;
+                else if (index) i = `...${i}`;
+                data.description = i;
+
+                if (this.dataPages[index] && (this.dataPages[index].description || this.dataPages[index].content)) data.fields.push({ name: "‎\u200b", value: this.dataPages[index].description || this.dataPages[index].content, inline: false});
+            }
+            else {
+                if (this.dataPages[index] && (this.dataPages[index].description || this.dataPages[index].content)) data.description = this.dataPages[index].description || this.dataPages[index].content;
+            }
 
             if ((this.dataPages[index] && this.dataPages[index].color) || this.color) data.color = this.dataPages[index] && this.dataPages[index].color || this.color;
             if ((this.dataPages[index] && this.dataPages[index].url) || this.url) data.url = this.dataPages[index] && this.dataPages[index].url || this.url;
@@ -70,15 +87,7 @@ module.exports = class EasyEmbedPages {
 
             if ((this.dataPages[index] && this.dataPages[index].thumbnail) || this.thumbnail) data.thumbnail = this.dataPages[index] && this.dataPages[index].thumbnail || this.thumbnail;
             if ((this.dataPages[index] && this.dataPages[index].image) || this.image) data.image = this.dataPages[index] && this.dataPages[index].image || this.image;
-            if (this.dataPages[index] && (this.dataPages[index].description || this.dataPages[index].content)) data.fields.push({ name: "‎\u200b", value: this.dataPages[index].description || this.dataPages[index].content, inline: false});
             if (this.dataPages[index] && this.dataPages[index].fields) this.dataPages[index].fields.map(x => data.fields.push({ name: x.name || "\u200b" , value: x.value || "\u200b" , inline: x.inline || false }));
-
-            if (array[index]) {
-                let i = array[index].join("");
-                if (index < great) i = `${i}...`;
-                else if (index) i = `...${i}`;
-                data.description = i;
-            }
 
             const embed = new Discord.MessageEmbed(data);
             this.pageGen(embed);
@@ -122,7 +131,7 @@ module.exports = class EasyEmbedPages {
             this.collector = this.message.createReactionCollector(condition, { dispose: true, idle: this.time });
             this.collector.on('collect', this._handleReaction.bind(this));
             this.collector.on('remove',  this._handleReaction.bind(this));
-            this.collector.once('end', () => this.message.reactions.removeAll());
+            this.collector.once('end', () => this.message.reactions.removeAll().catch(() => {}));
         }
     }
 
