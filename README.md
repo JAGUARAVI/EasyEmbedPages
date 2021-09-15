@@ -137,21 +137,22 @@ async function run(client, message, args) {
         let evaled = eval(args.join(' '));
         if (evaled instanceof Promise) evaled = await evaled;
         else if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
-        
+
         output = clean(evaled).replace(new RegExp(client.token, 'g'), '[TOKEN REMOVED]');
     } catch (err) {
         status = false;
         output = err.toString();
     }
-    
+
     const embed = new EasyEmbedPages(
         message.channel,
-        {   
+        {
             color: status ? 'GREEN' : 'RED',
             title: "Eval response",
             description: output,
             pageGen: (embed) => {
-            if(embed.description) embed.setDescription(`\`\`\`xl\n${embed.description}\n\`\`\``)
+                if(embed.description) embed.setDescription(`\`\`\`xl\n${embed.description}\n\`\`\``)
+            }
         }
     );
     embed.start({ user: message.author });
