@@ -1,6 +1,6 @@
 {
   "name": "easy-embed-pages",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "An awesome module for easy and 100% customizable dynamic embeds with interactive pages!",
   "main": "lib/EasyEmbedPages.js",
   "scripts": {
