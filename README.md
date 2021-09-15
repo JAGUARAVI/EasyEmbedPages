@@ -77,6 +77,7 @@ embed.start();
 ### Advanced Usage
 Full cranked up usage!
 ```js
+const EasyEmbedPages = require('easy-embed-pages');
 const embed = new EasyEmbedPages(message.channel, {
     //embed fields
     pages: [
@@ -86,7 +87,7 @@ const embed = new EasyEmbedPages(message.channel, {
             author: {
                 name: "Jaguar"
             }
-        }, 
+        },
         {
             fields: [
                 {
@@ -110,10 +111,6 @@ const embed = new EasyEmbedPages(message.channel, {
     description: "Insert long text here",
     image: "https://example.com/your_large_image.png",
     thumbnail: "https://example.com/your_small_thumbnail.png",
-    
-    allowStop: true, // enable if you want the stop button to appear used to stop the interactive process
-    time: 300000, // the idle time after which you want to stop the interactive process
-    ratelimit: 1500 // ratelimit (in milliseconds) to prevent reaction spam, optional. (anything greater than 2 is not recommended)
 },
 (embed) => {
     // this function will codeblock the whole description!
@@ -121,8 +118,8 @@ const embed = new EasyEmbedPages(message.channel, {
 });
 
 embed.start({
-    channel: message.channel, // the channel in which you want to send the embed
-    person: message.author    // use this if you only allow a specific person to control the reactions
+    channel: message.channel, // the channel in which you want to send the embed, optional
+    user: message.author    // use this if you only allow a specific person to control the reactions, optional
 });
 ```
 
@@ -152,9 +149,8 @@ async function run(client, message, args) {
         {   
             color: status ? 'GREEN' : 'RED',
             title: "Eval response",
-            description: output
-        },
-        (embed) => {
+            description: output,
+            pageGen: (embed) => {
             if(embed.description) embed.setDescription(`\`\`\`xl\n${embed.description}\n\`\`\``)
         }
     );

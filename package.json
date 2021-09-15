@@ -2,7 +2,7 @@
   "name": "easy-embed-pages",
   "version": "0.0.3",
   "description": "An awesome module for easy and 100% customizable dynamic embeds with interactive pages!",
-  "main": "index.js",
+  "main": "lib/EasyEmbedPages.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -27,8 +27,8 @@
     "url": "https://github.com/JAGUARAVI/EasyEmbedPages/issues"
   },
   "homepage": "https://github.com/JAGUARAVI/EasyEmbedPages#readme",
+  "types": "./typings/index.d.ts",
   "dependencies": {
-    "discord.js": "^12.5.1"
-  },
-  "types": "./typings/index.d.ts"
+    "discord.js": "^13.1.0"
+  }
 }
